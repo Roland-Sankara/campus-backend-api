@@ -1,0 +1,103 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// CORE MODELS
+// ============================================
+
+model Student {
+  id         String  @id @default(uuid())
+  rollNumber String  @unique @map("roll_number")
+  name       String
+  email      String  @unique
+  phone      String?
+
+  // Academic Info
+  currentSemester Int    @map("current_semester")
+  programName     String @map("program_name") // e.g., "Bachelor of Computer Science"
+  department      String // e.g., "ICT"
+
+  // Performance
+  gpa          Float @default(0.0)
+  totalCredits Int   @default(0) @map("total_credits")
+
+  // Status
+  status String @default("ACTIVE") // ACTIVE, GRADUATED, SUSPENDED
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  enrollments Enrollment[]
+
+  @@index([rollNumber])
+  @@map("students")
+}
+
+model Course {
+  id          String  @id @default(uuid())
+  courseCode  String  @unique @map("course_code")
+  courseName  String  @map("course_name")
+  credits     Int     @default(3)
+  department  String
+  description String?
+
+  // Contact info
+  instructor      String? // Instructor name
+  instructorEmail String? @map("instructor_email")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  enrollments Enrollment[]
+
+  @@index([courseCode])
+  @@map("courses")
+}
+
+model Enrollment {
+  id String @id @default(uuid())
+
+  studentId String  @map("student_id")
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  courseId String @map("course_id")
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  // Enrollment Details
+  semester     Int // Which semester the student took this course
+  academicYear String @map("academic_year") // e.g., "2024/2025"
+
+  // Grades
+  assignmentScore Float?  @map("assignment_score") // Out of 20
+  midtermScore    Float?  @map("midterm_score") // Out of 30
+  finalScore      Float?  @map("final_score") // Out of 50
+  totalScore      Float?  @map("total_score") // Out of 100
+  letterGrade     String? @map("letter_grade") // A+, A, B+, B, etc
+  gradePoint      Float?  @map("grade_point") // 4.0, 3.5, etc
+
+  // Status
+  status String @default("IN_PROGRESS") // IN_PROGRESS, COMPLETED, DROPPED
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([studentId, courseId, semester, academicYear])
+  @@index([studentId])
+  @@index([courseId])
+  @@map("enrollments")
+}
