@@ -1,6 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const app = express();
+require('dotenv').config();
 
 // Routers
 const studentRouter = require('./routes/students.router');
@@ -17,7 +18,7 @@ app.get('/api/', (req,res)=>{
     res.send('Welcome to ISBAT-Integrated-Student-Management-System API');
 })
 
-const PORT = 5008;
+const PORT = process.env.PORT || 5008;
 
 app.listen(PORT, ()=>{
     console.log(`Server Listening on Port ${PORT}`);
