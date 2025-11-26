@@ -1,4 +1,4 @@
-# ISBAT Student Management System API Documentation
+# CAMPUS Management System API
 
 ## Base URL
 ```
@@ -6,7 +6,7 @@ http://localhost:5008/api
 ```
 
 ## Overview
-This API provides endpoints for accessing student information, courses, enrollments, and performance data for the ISBAT University Student Management System. Designed to integrate with AI voice agents for automated student support.
+This API provides endpoints for accessing student information, courses, enrollments, and performance data for Campus Student Management System. Designed to integrate with AI voice agents for automated student support.
 
 ---
 
