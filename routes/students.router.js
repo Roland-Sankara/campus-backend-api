@@ -9,7 +9,7 @@ const prisma = new PrismaClient();
 // GET STUDENT BY ROLL NUMBER
 // ============================================
 
-router.get('/:rollNumber', async (req, res) => {
+router.post('/:rollNumber', async (req, res) => {
     try {
         const { rollNumber } = req.params;
 
