@@ -9,9 +9,9 @@ const prisma = new PrismaClient();
 // GET STUDENT BY ROLL NUMBER
 // ============================================
 
-router.post('/:rollNumber', async (req, res) => {
+router.post('/', async (req, res) => {
     try {
-        const { rollNumber } = req.params;
+        const { rollNumber } = req.query;
 
         // Find student with all enrollments and course details
         const student = await prisma.student.findUnique({
