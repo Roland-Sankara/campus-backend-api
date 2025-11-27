@@ -1,5 +1,6 @@
 const express = require('express');
 const morgan = require('morgan');
+const cors = require('cors');
 const app = express();
 require('dotenv').config();
 
@@ -9,6 +10,7 @@ const courseRouter = require('./routes/courses.router');
 
 // Middleware
 app.use(express.json())
+app.use(cors());
 app.use(morgan('common'))
 
 app.use('/api/students', studentRouter);
